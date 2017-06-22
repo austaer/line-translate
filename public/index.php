@@ -51,7 +51,7 @@ foreach ($events as $event) {
 		$res = $client->get("https://api.line.me/v2/bot/message/$messageId/content", array('headers' => array(
 			'Authorization' => "Bearer " . LINE_MESSAGING_API_CHANNEL_TOKEN
 		)));
-		$path = __DIR__ . "tmp/" . uniqid(rand(), true) . '.png';
+		$path = __DIR__ . "/tmp/" . uniqid(rand(), true) . '.png';
 
 		$file = fopen($path, "w+");
 		fwrite($file, $res->getBody());
