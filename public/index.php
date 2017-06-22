@@ -59,6 +59,8 @@ foreach ($events as $event) {
 		
 		$QRCodeReader = new Libern\QRCodeReader\QRCodeReader();
 		$qrcode_text = $QRCodeReader->decode($path);
+	
+		$bot->replyText($reply_token, $messageId);
 		$bot->replyText($reply_token, $qrcode_text);
 		unlink($path);
 	}

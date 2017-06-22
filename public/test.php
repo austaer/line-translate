@@ -7,7 +7,11 @@ require_once(__DIR__ . "/../vendor/autoload.php");
 		$res = $client->get("https://api.line.me/v2/bot/message/6277341612783/content", array('headers' => array(
 			'Authorization' => "Bearer " . LINE_MESSAGING_API_CHANNEL_TOKEN
 		)));
-		$file = fopen("image.png", "w+");
+		var_dump($res);
+		die();
+		
+		$path = "tmp/" . uniqid(rand(), true) . '.png';
+		$file = fopen($path, "w+");
 		fwrite($file, $res->getBody());
 		fclose($file);
 		$QRCodeReader = new Libern\QRCodeReader\QRCodeReader();
