@@ -47,12 +47,13 @@ foreach ($events as $event) {
 		// $client = new \GuzzleHttp\Client();
         $reply_token = $event->getReplyToken();
 		$messageId = $event->getMessageId();
-        $bot->replyText($reply_token, "https://api.line.me/v2/bot/message/$messageId/content");
-		// $messageId = $event->message->id;
-		// // $client->get("https://api.line.me/v2/bot/message/$messageId/content", array('headers' => array(
-			// // 'Authorization' => "Bearer " . LINE_MESSAGING_API_CHANNEL_TOKEN
-		// // )));
-		// $bot->replyText($reply_token, "https://api.line.me/v2/bot/message/$messageId/content");
+
+		$data = $client->get("https://api.line.me/v2/bot/message/$messageId/content", array('headers' => array(
+			'Authorization' => "Bearer " . LINE_MESSAGING_API_CHANNEL_TOKEN
+		)));
+		$qrcode = new QrReader($data);
+		$text = $qrcode->text();
+		$bot->replyText($reply_token, $text);
 	}
 }
 echo "OK";
