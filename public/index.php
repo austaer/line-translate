@@ -47,7 +47,8 @@ foreach ($events as $event) {
 		$client = new \GuzzleHttp\Client();
         $reply_token = $event->getReplyToken();
 		$messageId = $event->getMessageId();
-
+		$bot->replyText($reply_token, $messageId);
+		exit;
 		$res = $client->get("https://api.line.me/v2/bot/message/$messageId/content", array('headers' => array(
 			'Authorization' => "Bearer " . LINE_MESSAGING_API_CHANNEL_TOKEN
 		)));
@@ -60,7 +61,7 @@ foreach ($events as $event) {
 		$QRCodeReader = new Libern\QRCodeReader\QRCodeReader();
 		$qrcode_text = $QRCodeReader->decode($path);
 	
-		$bot->replyText($reply_token, $messageId);
+		
 		$bot->replyText($reply_token, $qrcode_text);
 		unlink($path);
 	}
