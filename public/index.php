@@ -44,7 +44,7 @@ foreach ($events as $event) {
     }
 	
 	if($event instanceof \LINE\LINEBot\Event\MessageEvent\ImageMessage) {
-		// $client = new \GuzzleHttp\Client();
+		$client = new \GuzzleHttp\Client();
         $reply_token = $event->getReplyToken();
 		$messageId = $event->getMessageId();
 
