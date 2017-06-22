@@ -52,10 +52,7 @@ foreach ($events as $event) {
 			'Authorization' => "Bearer " . LINE_MESSAGING_API_CHANNEL_TOKEN
 		)));
 		$path = "tmp/" . uniqid(rand(), true) . 'png';
-		if(!file_exists("tmp/")){
-			mkdir("tmp");
-		}
-		
+
 		$file = fopen($path, "w+");
 		fwrite($file, $res->getBody());
 		fclose($file);
