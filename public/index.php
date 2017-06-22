@@ -46,6 +46,7 @@ foreach ($events as $event) {
 	if($event instanceof \LINE\LINEBot\Event\MessageEvent\ImageMessage) {
 		// $client = new \GuzzleHttp\Client();
 		$reply_token = $event->getReplyToken();
+		$bot->replyText($reply_token, (string)$event);
 		$messageId = $event->message->id;
 		// $client->get("https://api.line.me/v2/bot/message/$messageId/content", array('headers' => array(
 			// 'Authorization' => "Bearer " . LINE_MESSAGING_API_CHANNEL_TOKEN
