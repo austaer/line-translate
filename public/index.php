@@ -47,7 +47,7 @@ foreach ($events as $event) {
 		$client = new \GuzzleHttp\Client();
 		$reply_token = $event->getReplyToken();
 		$messageId = $event->message->id;
-		$client->get("https://api.line.me/v2/bot/message/$messageId/content", $data = array('headers' => array(
+		$client->get("https://api.line.me/v2/bot/message/$messageId/content", array('headers' => array(
 			'Authorization' => "Bearer " . LINE_MESSAGING_API_CHANNEL_TOKEN
 		)));
 		$bot->replyText($reply_token, "https://api.line.me/v2/bot/message/$messageId/content");
