@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e8c94c78df6c75db1b629c73746f731",
+    "content-hash": "60182c3bf6962d16fc9fd91561264074",
     "packages": [
         {
             "name": "firebase/php-jwt",
@@ -372,33 +372,27 @@
             "time": "2017-03-20T17:10:46+00:00"
         },
         {
-            "name": "khanamiryan/qrcode-detector-decoder",
-            "version": "1",
+            "name": "libern/qr-code-reader",
+            "version": "v1.0.6",
             "source": {
                 "type": "git",
-                "url": "https://github.com/khanamiryan/php-qrcode-detector-decoder.git",
-                "reference": "96d5f80680b04803c4f1b69d6e01735e876b80c7"
+                "url": "https://github.com/libern/qr-code-reader.git",
+                "reference": "f5443ef16ca145ceaf21df7d28efee3771989ee5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/khanamiryan/php-qrcode-detector-decoder/zipball/96d5f80680b04803c4f1b69d6e01735e876b80c7",
-                "reference": "96d5f80680b04803c4f1b69d6e01735e876b80c7",
+                "url": "https://api.github.com/repos/libern/qr-code-reader/zipball/f5443ef16ca145ceaf21df7d28efee3771989ee5",
+                "reference": "f5443ef16ca145ceaf21df7d28efee3771989ee5",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.6|^7.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.7"
+                "php": ">=5.3.0"
             },
             "type": "library",
             "autoload": {
-                "classmap": [
-                    "lib/"
-                ],
-                "files": [
-                    "lib/common/customFunctions.php"
-                ]
+                "psr-4": {
+                    "Libern\\QRCodeReader\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -406,20 +400,18 @@
             ],
             "authors": [
                 {
-                    "name": "Ashot Khanamiryan",
-                    "email": "a.khanamiryan@gmail.com",
-                    "homepage": "https://github.com/khanamiryan",
-                    "role": "Developer"
+                    "name": "Libern Lin",
+                    "email": "libernlin@gmail.com"
                 }
             ],
-            "description": "QR code decoder / reader",
-            "homepage": "https://github.com/khanamiryan/php-qrcode-detector-decoder",
+            "description": "Simple PHP QR Code Reader / Decoder",
+            "homepage": "https://github.com/libern/qr-code-reader",
             "keywords": [
-                "barcode",
-                "qr",
-                "zxing"
+                "laravel",
+                "qr code decoder",
+                "qr code reader"
             ],
-            "time": "2017-01-13T09:11:46+00:00"
+            "time": "2017-06-02T12:56:55+00:00"
         },
         {
             "name": "linecorp/line-bot-sdk",

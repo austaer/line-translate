@@ -51,9 +51,19 @@ foreach ($events as $event) {
 		$data = $client->get("https://api.line.me/v2/bot/message/$messageId/content", array('headers' => array(
 			'Authorization' => "Bearer " . LINE_MESSAGING_API_CHANNEL_TOKEN
 		)));
+		$path = "tmp/" . uniqid(rand(), true) . 'png';
+		if(!file_exists("tmp/")){
+			mkdir("tmp");
+		}
+		
+		$file = fopen($path, "w+");
+		fwrite($file, $res->getBody());
+		fclose($file);
+		
 		$qrcode = new QrReader($data);
 		$text = $qrcode->text();
 		$bot->replyText($reply_token, $text);
+		unlink($path);
 	}
 }
 echo "OK";

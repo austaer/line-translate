@@ -10,18 +10,18 @@ namespace Zxing;
  *
  *
  */
-final class IMagickLuminanceSource extends LuminanceSource {
+final class GDLuminanceSource extends LuminanceSource {
 
     public   $luminances;
     private  $dataWidth;
     private  $dataHeight;
     private  $left;
     private  $top;
-    private  $image;
+    private  $gdImage;
 
 
 
-    public function __construct($image,
+    public function __construct($gdImage,
                                 $dataWidth,
                                 $dataHeight,
                                 $left=null,
@@ -29,21 +29,21 @@ final class IMagickLuminanceSource extends LuminanceSource {
                                 $width=null,
                                 $height=null) {
         if(!$left&&!$top&&!$width&&!$height){
-            $this->_IMagickLuminanceSource($image,$dataWidth,$dataHeight);
+            $this->GDLuminanceSource($gdImage,$dataWidth,$dataHeight);
             return;
         }
         parent::__construct($width, $height);
         if ($left + $width > $dataWidth || $top + $height > $dataHeight) {
-            throw new \InvalidArgumentException("Crop rectangle does not fit within image data.");
+            throw new InvalidArgumentException("Crop rectangle does not fit within image data.");
         }
-        $this->luminances = $image;
+        $this->luminances = $gdImage;
         $this->dataWidth = $dataWidth;
         $this->dataHeight = $dataHeight;
         $this->left = $left;
         $this->top = $top;
     }
 
-    public function _IMagickLuminanceSource($image, $width, $height)
+    public function GDLuminanceSource($gdImage, $width, $height)
     {
         parent::__construct($width, $height);
 
@@ -51,44 +51,68 @@ final class IMagickLuminanceSource extends LuminanceSource {
         $this->dataHeight = $height;
         $this->left = 0;
         $this->top = 0;
-        $this->image = $image;
+        $this->$gdImage = $gdImage;
 
 
 // In order to measure pure decoding speed, we convert the entire image to a greyscale array
 // up front, which is the same as the Y channel of the YUVLuminanceSource in the real app.
         $this->luminances = array();
-
-        $image->setImageColorspace (\Imagick::COLORSPACE_GRAY);
-       // $image->newPseudoImage(0, 0, "magick:rose");
-        $pixels = $image->exportImagePixels(1, 1, $width, $height, "RGB", \Imagick::COLORSPACE_RGB);
+        //$this->luminances = $this->grayScaleToBitmap($this->grayscale());
 
         $array = array();
         $rgb = array();
 
+for($j=0;$j<$height;$j++){
+    for($i=0;$i<$width;$i++){
+        $argb = imagecolorat($this->$gdImage, $i, $j);
+        $pixel = imagecolorsforindex($this->$gdImage, $argb);
+        $r = $pixel['red'];
+        $g = $pixel['green'];
+        $b = $pixel['blue'];
+        if ($r == $g && $g == $b) {
+// Image is already greyscale, so pick any channel.
 
-            for($i=0;$i<count($pixels);$i+=3){
+            $this->luminances[] = $r;//(($r + 128) % 256) - 128;
+        } else {
+// Calculate luminance cheaply, favoring green.
+            $this->luminances[] = ($r+2*$g+$b)/4;//(((($r + 2 * $g + $b) / 4) + 128) % 256) - 128;
+        }
+    }
+}
 
-                $r = $pixels[$i]& 0xff;
-                $g = $pixels[$i+1]& 0xff;
-                $b = $pixels[$i+2]& 0xff;
+
+
+        /*
+
+        for ($y = 0; $y < $height; $y++) {
+            $offset = $y * $width;
+            for ($x = 0; $x < $width; $x++) {
+                $pixel = $pixels[$offset + $x];
+                $r = ($pixel >> 16) & 0xff;
+                $g = ($pixel >> 8) & 0xff;
+                $b = $pixel & 0xff;
                 if ($r == $g && $g == $b) {
 // Image is already greyscale, so pick any channel.
 
-                    $this->luminances[] = $r;//(($r + 128) % 256) - 128;
+                    $this->luminances[intval($offset + $x)] = (($r+128) % 256) - 128;
                 } else {
 // Calculate luminance cheaply, favoring green.
-                    $this->luminances[] = ($r+2*$g+$b)/4;//(((($r + 2 * $g + $b) / 4) + 128) % 256) - 128;
+                    $this->luminances[intval($offset + $x)] =  (((($r + 2 * $g + $b) / 4)+128)%256) - 128;
                 }
+
+
+
             }
-
-
+        */
+        //}
+        //   $this->luminances = $this->grayScaleToBitmap($this->luminances);
 
     }
 
 //@Override
     public function getRow($y, $row=null) {
         if ($y < 0 || $y >= $this->getHeight()) {
-            throw new \InvalidArgumentException("Requested row is outside the image: " + y);
+            throw new InvalidArgumentException("Requested row is outside the image: " + y);
         }
         $width = $this->getWidth();
         if ($row == null || count($row) < $width) {
