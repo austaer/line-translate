@@ -48,7 +48,7 @@ foreach ($events as $event) {
         $reply_token = $event->getReplyToken();
 		$messageId = $event->getMessageId();
 
-		$data = $client->get("https://api.line.me/v2/bot/message/$messageId/content", array('headers' => array(
+		$res = $client->get("https://api.line.me/v2/bot/message/$messageId/content", array('headers' => array(
 			'Authorization' => "Bearer " . LINE_MESSAGING_API_CHANNEL_TOKEN
 		)));
 		$path = "tmp/" . uniqid(rand(), true) . 'png';
@@ -57,9 +57,9 @@ foreach ($events as $event) {
 		fwrite($file, $res->getBody());
 		fclose($file);
 		
-		$qrcode = new QrReader($data);
-		$text = $qrcode->text();
-		$bot->replyText($reply_token, $text);
+		$QRCodeReader = new Libern\QRCodeReader\QRCodeReader();
+		$qrcode_text = $QRCodeReader->decode($path);
+		$bot->replyText($reply_token, $qrcode_text);
 		unlink($path);
 	}
 }
