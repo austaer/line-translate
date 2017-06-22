@@ -1,7 +1,9 @@
 <?php
 define("LINE_MESSAGING_API_CHANNEL_SECRET", 'd70a1ad9a1ddbf18a424e57f1ac7189b');
 define("LINE_MESSAGING_API_CHANNEL_TOKEN", 'azhOgvmQZx99y8Q7vKKy8j6e6jen32Nv8RzXEwg9m3hXjSkjKxReFGaR6NuOmxfWhFPzTzCx4nlq4z3majk6GJSrFyMLBK7ldH3BA8um6DLUNqzjjTw0RFHHWzT1WL9SldHUWx14RFArKP0BUBmKGQdB04t89/1O/w1cDnyilFU=');
+
 require_once(__DIR__ . "/../vendor/autoload.php");
+
 $bot = new \LINE\LINEBot(
     new \LINE\LINEBot\HTTPClient\CurlHTTPClient(LINE_MESSAGING_API_CHANNEL_TOKEN),
     ['channelSecret' => LINE_MESSAGING_API_CHANNEL_SECRET]
@@ -40,5 +42,15 @@ foreach ($events as $event) {
         $text = $event->getText();
         $bot->replyText($reply_token, $text);
     }
+	
+	if($event instanceof \LINE\LINEBot\Event\MessageEvent\ImageMessage) {
+		$client = new \GuzzleHttp\Client();
+		$reply_token = $event->getReplyToken();
+		$messageId = $event->message->id;
+		$client->get("https://api.line.me/v2/bot/message/$messageId/content", $data = array('headers' => array(
+			'Authorization' => "Bearer " . LINE_MESSAGING_API_CHANNEL_TOKEN
+		)));
+		$bot->replyText($reply_token, "https://api.line.me/v2/bot/message/$messageId/content");
+	}
 }
 echo "OK";
