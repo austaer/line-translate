@@ -7,14 +7,8 @@ require_once(__DIR__ . "/../vendor/autoload.php");
 		$res = $client->get("https://api.line.me/v2/bot/message/6277341612783/content", array('headers' => array(
 			'Authorization' => "Bearer " . LINE_MESSAGING_API_CHANNEL_TOKEN
 		)));
-		var_dump($res);
-		die();
 		
-		$path = "tmp/" . uniqid(rand(), true) . '.png';
-		$file = fopen($path, "w+");
-		fwrite($file, $res->getBody());
-		fclose($file);
-		$QRCodeReader = new Libern\QRCodeReader\QRCodeReader();
-		$qrcode_text = $QRCodeReader->decode("ih5njlT937.png");
-		echo $qrcode_text;
+		$qrcode = new QrReader($res->getBody(), QrReader::SOURCE_TYPE_RESOURCE);
+		$text = $qrcode->text(); //return decoded text from QR Code
+		var_dump($qrcode);
 		

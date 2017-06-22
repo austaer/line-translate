@@ -47,22 +47,19 @@ foreach ($events as $event) {
 		$client = new \GuzzleHttp\Client();
         $reply_token = $event->getReplyToken();
 		$messageId = $event->getMessageId();
-		$bot->replyText($reply_token, $messageId);
-		exit;
+
 		$res = $client->get("https://api.line.me/v2/bot/message/$messageId/content", array('headers' => array(
 			'Authorization' => "Bearer " . LINE_MESSAGING_API_CHANNEL_TOKEN
 		)));
-		$path = "tmp/" . uniqid(rand(), true) . '.png';
+		$path = __DIR__ . "tmp/" . uniqid(rand(), true) . '.png';
 
 		$file = fopen($path, "w+");
 		fwrite($file, $res->getBody());
 		fclose($file);
-		
-		$QRCodeReader = new Libern\QRCodeReader\QRCodeReader();
-		$qrcode_text = $QRCodeReader->decode($path);
 	
-		
-		$bot->replyText($reply_token, $qrcode_text);
+		$qrcode = new QrReader($path);	
+		$text = $qrcode->text(); //return decoded text from QR Code
+		$bot->replyText($reply_token, $text);
 		unlink($path);
 	}
 }
