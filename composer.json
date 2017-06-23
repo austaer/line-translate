@@ -4,6 +4,7 @@
         "google/apiclient": "^2.1",
         "khanamiryan/qrcode-detector-decoder": "^1.0",
         "ext-gd": "^7.0",
-        "ext-mbstring": "^7.0"
+        "ext-mbstring": "^7.0",
+        "google/cloud": "^0.32.1"
     }
 }
